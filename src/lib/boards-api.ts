@@ -5,6 +5,7 @@ import type {
   BoardVisibility,
   CreateBoardInput,
 } from '@shared/board';
+import type { BoardPostMedia } from '@shared/board';
 
 export async function listBoards(): Promise<BoardSummary[]> {
   const res = await apiClient.get<BoardSummary[]>('/boards');
@@ -45,6 +46,32 @@ export async function updateBoardVisibility(
   const res = await apiClient.patch<Board>(`/boards/${id}/visibility`, {
     visibility,
   });
+  return res.data;
+}
+
+export async function updateBoardPost(
+  id: string,
+  input: {
+    postTitle: string;
+    postDetails: string;
+    postTags: string[];
+    postMedia: BoardPostMedia[];
+  },
+): Promise<Board> {
+  const res = await apiClient.patch<Board>(`/boards/${id}/post`, input);
+  return res.data;
+}
+
+export async function publishBoard(
+  id: string,
+  input: {
+    postTitle: string;
+    postDetails: string;
+    postTags: string[];
+    postMedia: BoardPostMedia[];
+  },
+): Promise<Board> {
+  const res = await apiClient.post<Board>(`/boards/${id}/publish`, input);
   return res.data;
 }
 

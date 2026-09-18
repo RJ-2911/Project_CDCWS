@@ -60,3 +60,13 @@ export async function setBoardCommunity(
   const res = await apiClient.put<Board>(`/boards/${boardId}/community`, { slug });
   return res.data;
 }
+
+export async function setBoardCommunities(
+  boardId: string,
+  slugs: string[],
+): Promise<Board> {
+  const res = await apiClient.put<Board>(`/boards/${boardId}/communities`, {
+    slugs,
+  });
+  return res.data;
+}
