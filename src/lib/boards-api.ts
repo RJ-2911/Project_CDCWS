@@ -47,3 +47,7 @@ export async function updateBoardVisibility(
   });
   return res.data;
 }
+
+export async function deleteBoard(id: string): Promise<void> {
+  await apiClient.delete(`/boards/${id}`);
+}

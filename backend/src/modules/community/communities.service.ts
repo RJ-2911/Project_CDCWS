@@ -178,6 +178,20 @@ export class CommunitiesService {
     return summary;
   }
 
+  async remove(slug: string, currentUserId: string): Promise<void> {
+    const community = await this.findBySlugOrFail(slug);
+    const membership = await this.membersRepository.findOneBy({
+      communityId: community.id,
+      userId: currentUserId,
+    });
+
+    if (membership?.role !== CommunityRole.OWNER) {
+      throw new ForbiddenException('Only the community owner can delete it.');
+    }
+
+    await this.communitiesRepository.remove(community);
+  }
+
   /** Public boards posted to this community, newest first. */
   async listBoards(slug: string, currentUserId: string): Promise<FeedItem[]> {
     const community = await this.findBySlugOrFail(slug);

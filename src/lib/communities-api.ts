@@ -49,6 +49,10 @@ export async function leaveCommunity(slug: string): Promise<CommunitySummary> {
   return res.data;
 }
 
+export async function deleteCommunity(slug: string): Promise<void> {
+  await apiClient.delete(`/communities/${slug}`);
+}
+
 export async function setBoardCommunity(
   boardId: string,
   slug: string | null,

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -52,5 +52,10 @@ export class BoardsController {
     @Session() session: UserSession,
   ) {
     return this.boardsService.updateVisibility(id, session.user.id, dto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string, @Session() session: UserSession) {
+    return this.boardsService.remove(id, session.user.id);
   }
 }

@@ -80,4 +80,9 @@ export class BoardsService {
     board.visibility = dto.visibility;
     return this.boardsRepository.save(board);
   }
+
+  async remove(id: string, ownerId: string): Promise<void> {
+    const board = await this.findOneOwnedBy(id, ownerId);
+    await this.boardsRepository.remove(board);
+  }
 }

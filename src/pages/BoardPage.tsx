@@ -1,40 +1,56 @@
-import { ArrowLeft, Globe, Lock } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import type { Editor } from '@tldraw/tldraw';
-import { getBoard, updateBoardVisibility } from '@/lib/boards-api';
-import { BoardCanvas } from '@/features/canvas/BoardCanvas';
-import { ShareTray } from '@/features/share/ShareTray';
-import { BoardTitle } from '@/features/canvas/BoardTitle';
-import { CommunityPicker } from '@/features/community/CommunityPicker';
-import { VoiceBar } from '@/features/voice/VoiceBar';
-import { DrawgonLoader } from '@/components/DrawgonLoader';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import type { Board } from '@shared/board';
+import { ArrowLeft, Globe, Lock, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import type { Editor } from "@tldraw/tldraw";
+import { deleteBoard, getBoard, updateBoardVisibility } from "@/lib/boards-api";
+import { BoardCanvas } from "@/features/canvas/BoardCanvas";
+import { ShareTray } from "@/features/share/ShareTray";
+import { BoardTitle } from "@/features/canvas/BoardTitle";
+import { CommunityPicker } from "@/features/community/CommunityPicker";
+import { VoiceBar } from "@/features/voice/VoiceBar";
+import { DrawgonLoader } from "@/components/DrawgonLoader";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import type { Board } from "@shared/board";
 
 export function BoardPage() {
   const { boardId } = useParams<{ boardId: string }>();
   const [board, setBoard] = useState<Board | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [togglingVisibility, setTogglingVisibility] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [editor, setEditor] = useState<Editor | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!boardId) return;
     getBoard(boardId)
       .then(setBoard)
-      .catch(() => setError('Board not found.'));
+      .catch(() => setError("Board not found."));
   }, [boardId]);
 
   async function togglePublish() {
     if (!board || togglingVisibility) return;
     setTogglingVisibility(true);
     try {
-      const nextVisibility = board.visibility === 'public' ? 'private' : 'public';
+      const nextVisibility =
+        board.visibility === "public" ? "private" : "public";
       const updated = await updateBoardVisibility(board.id, nextVisibility);
       setBoard(updated);
     } finally {
       setTogglingVisibility(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!board || deleting) return;
+    if (!window.confirm(`Delete “${board.title}”? This cannot be undone.`))
+      return;
+    setDeleting(true);
+    try {
+      await deleteBoard(board.id);
+      navigate("/");
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -76,18 +92,32 @@ export function BoardPage() {
             disabled={togglingVisibility}
             className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-neutral-600 transition hover:bg-neutral-200/70 hover:text-neutral-900 disabled:opacity-50 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-50"
           >
-            {board.visibility === 'public' ? <Globe size={13} /> : <Lock size={13} />}
-            {board.visibility === 'public'
-              ? 'Public — make private'
-              : 'Private — publish to community'}
+            {board.visibility === "public" ? (
+              <Globe size={13} />
+            ) : (
+              <Lock size={13} />
+            )}
+            {board.visibility === "public"
+              ? "Public — make private"
+              : "Private — publish to community"}
           </button>
-          {board.visibility === 'public' && (
+          {board.visibility === "public" && (
             <CommunityPicker
               boardId={board.id}
               communityId={board.communityId}
               onChange={(communityId) => setBoard({ ...board, communityId })}
             />
           )}
+          <button
+            type="button"
+            onClick={() => void handleDelete()}
+            disabled={deleting}
+            aria-label="Delete board"
+            title="Delete board"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full text-neutral-400 transition hover:bg-red-100 hover:text-red-600 disabled:opacity-50 dark:text-neutral-500 dark:hover:bg-red-500/15 dark:hover:text-red-400"
+          >
+            <Trash2 size={15} />
+          </button>
         </div>
         <ThemeToggle />
       </div>

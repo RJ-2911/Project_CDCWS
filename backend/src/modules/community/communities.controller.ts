@@ -51,6 +51,11 @@ export class CommunitiesController {
   leave(@Param('slug') slug: string, @Session() session: UserSession) {
     return this.communitiesService.leave(slug, session.user.id);
   }
+
+  @Delete(':slug')
+  remove(@Param('slug') slug: string, @Session() session: UserSession) {
+    return this.communitiesService.remove(slug, session.user.id);
+  }
 }
 
 @Controller('boards')
