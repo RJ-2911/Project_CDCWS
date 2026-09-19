@@ -1,10 +1,10 @@
 # Render blueprint for the Drawgon NestJS API.
 #
-# Netlify serves only the static frontend; it cannot host this service. The
+# Vercel serves the static frontend; it cannot host this service. The
 # socket.io voice gateway needs a long-lived process and the Postgres pool
 # needs to survive between requests, neither of which a serverless function
 # provides. Deploy this blueprint, then point the frontend's VITE_API_URL at
-# the resulting https://<service>.onrender.com origin and rebuild on Netlify.
+# the resulting https://<service>.onrender.com origin and rebuild on Vercel.
 services:
   - type: web
     name: drawgon-api
@@ -44,7 +44,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: FRONTEND_URL
-        value: https://drawgons.netlify.app
+        value: https://project-cdcws.vercel.app
       # Set these in the Render dashboard — never commit them.
       #   DATABASE_URL      Supabase session pooler URI (port 5432, not 6543)
       #   BETTER_AUTH_SECRET  reuse the existing value or generate a new one
