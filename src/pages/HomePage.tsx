@@ -1,20 +1,20 @@
-import { Compass, FileText, Plus, Sparkles } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import type { BoardSummary } from '@shared/board';
-import type { FeedItem } from '@shared/community';
-import { createBoard, listBoards } from '@/lib/boards-api';
-import { listCommunityFeed } from '@/lib/community-api';
-import { useSession } from '@/lib/auth-client';
-import { PinCard } from '@/features/community/PinCard';
-import { DrawgonLoader } from '@/components/DrawgonLoader';
-import { useToast } from '@/components/toast/ToastProvider';
+import { Compass, FileText, Plus, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import type { BoardSummary } from "@shared/board";
+import type { FeedItem } from "@shared/community";
+import { createBoard, listBoards } from "@/lib/boards-api";
+import { listCommunityFeed } from "@/lib/community-api";
+import { useSession } from "@/lib/auth-client";
+import { PinCard } from "@/features/community/PinCard";
+import { DrawgonLoader } from "@/components/DrawgonLoader";
+import { useToast } from "@/components/toast/ToastProvider";
 
 function greeting() {
   const h = new Date().getHours();
-  if (h < 12) return 'Good morning';
-  if (h < 18) return 'Good afternoon';
-  return 'Good evening';
+  if (h < 12) return "Good morning";
+  if (h < 18) return "Good afternoon";
+  return "Good evening";
 }
 
 export function HomePage() {
@@ -39,22 +39,24 @@ export function HomePage() {
     if (creating) return;
     setCreating(true);
     try {
-      const board = await createBoard({ title: 'Untitled board' });
+      const board = await createBoard({ title: "Untitled board" });
       navigate(`/boards/${board.id}`);
     } catch {
-      toast.error('Could not create canvas');
+      toast.error("Could not create canvas");
     } finally {
       setCreating(false);
     }
   }
 
-  const firstName = (session?.user.name || session?.user.email || '').split(/[\s@]/)[0];
+  const firstName = (session?.user?.name || session?.user?.email || "").split(
+    /[\s@]/,
+  )[0];
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
       <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
         {greeting()}
-        {firstName ? `, ${firstName}` : ''}
+        {firstName ? `, ${firstName}` : ""}
       </h1>
       <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
         Pick up where you left off, or find something new.
@@ -142,7 +144,9 @@ export function HomePage() {
       {!loading && boards.length === 0 && trending.length === 0 && (
         <div className="mt-10 flex flex-col items-center gap-3 rounded-xl border border-dashed border-neutral-300 py-20 text-center dark:border-neutral-700">
           <Sparkles size={24} className="text-neutral-400" />
-          <p className="text-neutral-500">Nothing here yet. Create your first canvas.</p>
+          <p className="text-neutral-500">
+            Nothing here yet. Create your first canvas.
+          </p>
         </div>
       )}
     </div>

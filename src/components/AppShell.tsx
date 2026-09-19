@@ -7,24 +7,24 @@ import {
   Plus,
   Settings,
   User,
-} from 'lucide-react';
-import { useEffect, useState, type ReactNode } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import type { CommunitySummary } from '@shared/community';
-import { listMyCommunities } from '@/lib/communities-api';
-import { createBoard } from '@/lib/boards-api';
-import { signOut, useSession } from '@/lib/auth-client';
-import { Avatar } from '@/components/Avatar';
-import { CommunityAvatar } from '@/features/community/CommunityAvatar';
-import { DrawgonMark } from '@/components/DrawgonMark';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { useToast } from '@/components/toast/ToastProvider';
+} from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import type { CommunitySummary } from "@shared/community";
+import { listMyCommunities } from "@/lib/communities-api";
+import { createBoard } from "@/lib/boards-api";
+import { signOut, useSession } from "@/lib/auth-client";
+import { Avatar } from "@/components/Avatar";
+import { CommunityAvatar } from "@/features/community/CommunityAvatar";
+import { DrawgonMark } from "@/components/DrawgonMark";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { useToast } from "@/components/toast/ToastProvider";
 
 const PRIMARY_NAV = [
-  { to: '/home', label: 'Home', icon: LayoutGrid, end: true },
-  { to: '/community', label: 'Explore', icon: Compass, end: false },
-  { to: '/saved', label: 'Saved', icon: Bookmark, end: false },
-  { to: '/', label: 'My Boards', icon: LayoutGrid, end: true },
+  { to: "/home", label: "Home", icon: LayoutGrid, end: true },
+  { to: "/community", label: "Explore", icon: Compass, end: false },
+  { to: "/saved", label: "Saved", icon: Bookmark, end: false },
+  { to: "/", label: "My Boards", icon: LayoutGrid, end: true },
 ];
 
 /**
@@ -48,11 +48,11 @@ export function AppShell({ children }: { children: ReactNode }) {
     if (creating) return;
     setCreating(true);
     try {
-      const board = await createBoard({ title: 'Untitled board' });
-      toast.success('Canvas created');
+      const board = await createBoard({ title: "Untitled board" });
+      toast.success("Canvas created");
       navigate(`/boards/${board.id}`);
     } catch {
-      toast.error('Could not create canvas');
+      toast.error("Could not create canvas");
     } finally {
       setCreating(false);
     }
@@ -61,8 +61,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   const navClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition ${
       isActive
-        ? 'bg-brand/10 text-brand'
-        : 'text-neutral-600 hover:bg-neutral-200/60 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-50'
+        ? "bg-brand/10 text-brand"
+        : "text-neutral-600 hover:bg-neutral-200/60 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-50"
     }`;
 
   return (
@@ -137,15 +137,18 @@ export function AppShell({ children }: { children: ReactNode }) {
               className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3.5 py-1.5 text-sm font-medium text-white transition hover:bg-brand-hover disabled:opacity-50"
             >
               <Plus size={15} />
-              {creating ? 'Creating...' : 'Create'}
+              {creating ? "Creating..." : "Create"}
             </button>
             <ThemeToggle />
             <Link
               to="/profile"
-              title={session?.user.email}
+              title={session?.user?.email || "Profile"}
               className="rounded-full transition hover:opacity-80"
             >
-              <Avatar name={session?.user.name || session?.user.email || '?'} size="sm" />
+              <Avatar
+                name={session?.user?.name || session?.user?.email || "?"}
+                size="sm"
+              />
             </Link>
             <button
               type="button"
