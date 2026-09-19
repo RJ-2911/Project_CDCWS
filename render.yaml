@@ -31,7 +31,6 @@ services:
       rm -rf dist tsconfig.build.tsbuildinfo &&
       npm run build
     startCommand: cd backend && npm run start:prod
-
     # AppController's GET / runs `SELECT 1`, so a passing health check also
     # proves the Supabase connection is live — not just that Node booted.
     healthCheckPath: /

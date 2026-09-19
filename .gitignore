@@ -35,5 +35,5 @@ coverage
 *.sln
 *.sw?
 
-# AI-generated reference material
-AI_Reference/
+# docs
+docs/
