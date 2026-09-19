@@ -7,9 +7,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Node.js dependencies and generated output
+node_modules/
+dist/
+coverage/
 *.local
 
 # Environment files
@@ -33,3 +34,6 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+# AI-generated reference material
+AI_Reference/
